@@ -67,9 +67,9 @@ c = jnp.reshape(z, (10,))
 ```python
 # Wrong: x[0] = 10  # This will fail!
 # Correct:
-x = x.at[0].set(10)
-x = x.at[0].add(5)
-x = x.at[0:2].multiply(2)
+x = x.at[0].set(10)        # Set index 0 to 10
+x = x.at[1].add(5)         # Add 5 to index 1
+x = x.at[0:2].multiply(2)  # Multiply indices 0-1 by 2
 ```
 
 ## Core Concepts
@@ -164,7 +164,7 @@ def f(x):
 df_dx = grad(f)
 
 # Compute gradient at x=1.0
-gradient = df_dx(1.0)  # Returns: 3*1^2 + 4*1 + 3 = 10.0
+gradient = df_dx(1.0)  # Returns: 3*(1)^2 + 4*(1) + 3 = 10.0
 
 # Gradients of multivariable functions
 def g(x, y):
@@ -316,7 +316,7 @@ def update(params, x, y, learning_rate=0.01):
     """Single training step"""
     loss, grads = value_and_grad(loss_fn)(params, x, y)
     # Update parameters
-    params = jax.tree_map(lambda p, g: p - learning_rate * g, params, grads)
+    params = jax.tree.map(lambda p, g: p - learning_rate * g, params, grads)
     return params, loss
 
 # Training loop
